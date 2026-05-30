@@ -1,2 +1,0 @@
-# PM-Hub
-Landing Page
