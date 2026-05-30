@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The PM Hub: Project Management Community</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700;1,800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #f0ebe0;
+      --bg-light:    #ede8dd;
+      --navy:        #0d1526;
+      --navy-card:   #111f38;
+      --navy-input:  #0f1a2e;
+      --border-navy: rgba(255,255,255,0.1);
+      --border-light: rgba(0,0,0,0.1);
+      --orange:      #e8692a;
+      --orange-dark: #b84f1a;
+      --text-dark:   #1a1a2e;
+      --text-mid:    #555566;
+      --text-light:  #8892a4;
+      --white:       #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text-dark);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.25rem;
+      height: 64px;
+      background: var(--navy);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-decoration: none;
+    }
+
+    .nav-logo-box {
+      width: 42px;
+      height: 42px;
+      background: #162040;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-logo-box .logo-pm {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+      text-align: center;
+      display: block;
+    }
+    .nav-logo-box .logo-hub {
+      font-size: 0.65rem;
+      font-weight: 600;
+      color: var(--orange);
+      display: block;
+      text-align: center;
+      line-height: 1;
+    }
+
+    .nav-wordmark {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      color: #fff;
+    }
+    .nav-wordmark em {
+      font-style: italic;
+      font-family: 'Playfair Display', serif;
+      color: var(--orange);
+      letter-spacing: 0.06em;
+    }
+
+    .nav-apply {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.4rem;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s;
+    }
+    .nav-apply:hover { background: #d05a22; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 100px 1.75rem 80px;
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* warm peach glow at bottom */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      height: 300px;
+      background: radial-gradient(ellipse, rgba(232,105,42,0.2) 0%, rgba(232,105,42,0.05) 50%, transparent 75%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      border: 1.5px solid var(--orange);
+      border-radius: 100px;
+      padding: 0.35rem 1rem;
+      margin-bottom: 2rem;
+      width: fit-content;
+    }
+
+    .hero-badge-dot {
+      width: 7px; height: 7px;
+      background: var(--orange);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .hero-badge span {
+      font-size: 0.67rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dark);
+    }
+
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 9vw, 4rem);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+      color: var(--text-dark);
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--orange);
+    }
+
+    .hero p {
+      font-size: 1rem;
+      color: var(--text-mid);
+      max-width: 560px;
+      margin-bottom: 2.25rem;
+      font-weight: 300;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-orange {
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.2s;
+    }
+    .btn-orange:hover { background: #d05a22; }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text-dark);
+      border: 1.5px solid rgba(0,0,0,0.2);
+      padding: 0.75rem 1.5rem;
+      border-radius: 100px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      transition: border-color 0.2s;
+    }
+    .btn-outline:hover { border-color: rgba(0,0,0,0.4); }
+
+    /* ── LOGO CARD ── */
+    .logo-card-wrap {
+      padding: 0 1.5rem 2.5rem;
+      background: var(--bg);
+    }
+
+    .logo-card {
+      border: 1.5px solid var(--orange);
+      border-radius: 18px;
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(232,105,42,0.1) 0%, transparent 70%);
+    }
+
+    .logo-card-inner {
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo-big {
+      font-size: 2.4rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .logo-big .the { font-size: 1rem; color: var(--text-light); vertical-align: super; font-family: 'Inter', sans-serif; font-weight: 400; letter-spacing: 0.05em; }
+    .logo-big .pm { font-family: 'Playfair Display', serif; color: #fff; }
+    .logo-big .hub { font-family: 'Playfair Display', serif; font-style: italic; color: var(--orange); }
+
+    .logo-sub {
+      font-size: 0.62rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--text-light);
+      margin-top: 0.6rem;
+    }
+
+    /* ── FEATURE CARDS ── */
+    .features-wrap {
+      background: var(--bg);
+      padding: 0 1.5rem 1rem;
+    }
+
+    .feature-card {
+      background: var(--navy-card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 1.75rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-icon {
+      color: var(--orange);
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      color: #fff;
+    }
+
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--text-light);
+      line-height: 1.7;
+      font-weight: 300;
+    }
+
+    /* ── SECTIONS ── */
+    .section {
+      padding: 3rem 1.75rem;
+      background: var(--navy);
+    }
+
+    .section-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 0.9rem;
+    }
+
+    .section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 7vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .section p.lead {
+      color: var(--text-light);
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── FORM BOX ── */
+    .form-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 1.5rem;
+      margin-top: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+      width: 100%;
+      background: var(--navy-input);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 0.65rem 0.9rem;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #4a5568; }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: rgba(232,105,42,0.5); }
+
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .btn-submit-orange {
+      width: 100%;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.25rem;
+    }
+    .btn-submit-orange:hover { background: #d05a22; }
+
+    .btn-submit-dark {
+      width: 100%;
+      background: var(--orange-dark);
+      color: #fff;
+      border: none;
+      padding: 0.85rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.25rem;
+    }
+    .btn-submit-dark:hover { background: #9a4016; }
+
+    /* ── SLOTS ── */
+    .slots-label {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: #fff;
+      margin-bottom: 0.75rem;
+    }
+
+    .slots-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .slot {
+      background: var(--navy-input);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 0.65rem 0.5rem;
+      font-size: 0.82rem;
+      color: var(--text-light);
+      cursor: pointer;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.15s;
+    }
+    .slot:hover, .slot.active {
+      border-color: var(--orange);
+      color: var(--orange);
+      background: rgba(232,105,42,0.07);
+    }
+
+    /* ── OR LABEL ── */
+    .or-label {
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin: 2.5rem 0 0.6rem;
+    }
+
+    /* ── BULLETS ── */
+    .bullet-list {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+    .bullet-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.5rem 0;
+      font-size: 0.95rem;
+      color: var(--text-light);
+      font-weight: 300;
+    }
+    .bullet-list li::before {
+      content: '→';
+      color: var(--orange);
+      flex-shrink: 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 2.5rem 1.75rem;
+      text-align: center;
+    }
+
+    .footer-logo-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      justify-content: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .footer-logo-box {
+      width: 30px; height: 30px;
+      background: #162040;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-logo-box span { font-size: 0.55rem; font-weight: 700; color: #fff; line-height: 1; }
+    .footer-logo-box em { font-style: normal; font-size: 0.5rem; color: var(--orange); font-weight: 600; }
+
+    footer p { font-size: 0.8rem; color: var(--text-light); line-height: 1.7; }
+
+    .icon { display: inline-block; width: 1.4rem; height: 1.4rem; stroke: var(--orange); fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; vertical-align: middle; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-box">
+        <span class="logo-pm">PM</span>
+        <span class="logo-hub">Hub</span>
+      </div>
+      <div class="nav-wordmark">THE PM.<em>HUB</em></div>
+    </a>
+    <a href="#join" class="nav-apply">Apply &nbsp;→</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Project Management Community</span>
+    </div>
+    <h1>A community for the <em>next generation</em> of project managers.</h1>
+    <p>Whether you're in college, finishing university, or pivoting from another career. The PM Hub is a safe space to network, share ideas, ask the questions you've been holding back, and build the confidence to land your first PM role.</p>
+    <div class="hero-actions">
+      <a href="#join" class="btn-orange">Request to join &nbsp;→</a>
+      <a href="#members" class="btn-outline">For Members</a>
+    </div>
+  </section>
+
+  <!-- LOGO CARD -->
+  <div class="logo-card-wrap">
+    <div class="logo-card">
+      <div class="logo-card-inner">
+        <div class="logo-big">
+          <span class="the">THE</span><span class="pm">PM.</span><span class="hub">Hub</span>
+        </div>
+        <div class="logo-sub">Project Management Community</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FEATURE CARDS -->
+  <div class="features-wrap">
+    <div class="feature-card">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.85"/></svg>
+      <h3>Network with peers</h3>
+      <p>Aspiring PMs across every industry: finance, tech, healthcare, construction and beyond.</p>
+    </div>
+    <div class="feature-card">
+      <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <h3>Real guidance</h3>
+      <p>Practical, honest advice from people who've walked the path you're starting.</p>
+    </div>
+    <div class="feature-card">
+      <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <h3>A safe space</h3>
+      <p>Ask anything. Share anything. No gatekeeping, no judgment. Just encouragement.</p>
+    </div>
+  </div>
+
+  <!-- JOIN SECTION -->
+  <section class="section" id="join">
+    <div class="section-label">01: Apply</div>
+    <h2>Request to join the community</h2>
+    <p class="lead">Tell me a little about you and where you are in your PM journey. I read every application personally and reach out within a few days.</p>
+
+    <form class="form-box" action="https://formspree.io/f/xlgvnegy" method="POST" id="join-form">
+      <div class="form-group">
+        <label for="join-name">Name</label>
+        <input type="text" id="join-name" name="name" placeholder="Your full name" required />
+      </div>
+      <div class="form-group">
+        <label for="join-age">Age</label>
+        <input type="text" id="join-age" name="age" placeholder="e.g. 24" required />
+      </div>
+      <div class="form-group">
+        <label for="join-role">Current role</label>
+        <input type="text" id="join-role" name="current_role" placeholder="Student, Analyst, Coordinator..." required />
+      </div>
+      <div class="form-group">
+        <label for="join-industry">Industry</label>
+        <input type="text" id="join-industry" name="industry" placeholder="Tech, Healthcare, Construction..." required />
+      </div>
+      <div class="form-group">
+        <label for="join-help">What can The PM Hub help you with?</label>
+        <textarea id="join-help" name="how_can_we_help" placeholder="Career pivot, interview prep, networking, certifications, day-in-the-life questions..." required></textarea>
+      </div>
+      <div id="join-success" style="display:none; color:#e8692a; font-size:0.9rem; margin-bottom:0.75rem; font-weight:500;">
+        Thanks! Your request has been received. I'll be in touch within a few days.
+      </div>
+      <button type="submit" class="btn-submit-orange">Request to join</button>
+    </form>
+
+    <div class="or-label">Or: Book a chat</div>
+    <h2 style="font-size:1.9rem; margin-bottom:0.6rem;">Schedule a 1-1 with me</h2>
+    <p class="lead" style="margin-bottom:0;">Want to talk before applying? Pick a slot from my availability and I'll confirm by email.</p>
+
+    <form class="form-box" id="chat-form" action="https://formspree.io/f/xvzyrokr" method="POST">
+      <input type="hidden" name="form_type" value="Book a Chat" />
+      <div class="slots-label">Pick a slot from my availability</div>
+      <div class="slots-grid">
+        <button class="slot" onclick="selectSlot(this)">Mon · 6:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 6:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 7:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 7:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 8:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 8:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 7:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 7:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 8:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 8:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 6:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 6:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 7:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 7:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 8:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 8:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 11:00 AM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 11:30 AM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 12:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 12:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 1:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 1:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 2:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 2:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 3:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 3:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 4:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 4:30 PM</button>
+      </div>
+      <input type="hidden" name="selected_slot" id="chat-slot-value" />
+      <div class="form-group">
+        <label for="chat-name">Name</label>
+        <input type="text" id="chat-name" name="name" placeholder="Your full name" required />
+      </div>
+      <div class="form-group">
+        <label for="chat-email">Email</label>
+        <input type="email" id="chat-email" name="email" placeholder="your@email.com" required />
+      </div>
+      <div class="form-group">
+        <label for="chat-notes">Anything you'd like to cover? (optional)</label>
+        <textarea id="chat-notes" name="notes" placeholder="e.g. interview prep for a PMO role"></textarea>
+      </div>
+      <div id="chat-success" style="display:none; color:#e8692a; font-size:0.9rem; margin-bottom:0.75rem; font-weight:500;">
+        Booked! I'll confirm your slot by email within 24 hours.
+      </div>
+      <button type="submit" class="btn-submit-dark">Request meeting</button>
+    </form>
+  </section>
+
+  <!-- MEMBERS SECTION -->
+  <section class="section" id="members" style="border-top: 1px solid rgba(255,255,255,0.06);">
+    <div class="section-label">02: For Members</div>
+    <h2>Already in the Hub? Book your 1-1.</h2>
+    <p class="lead">This section is what I share inside the community. Members can grab time with me whenever they need a sounding board: CV reviews, interview prep, career decisions, or just a pep talk.</p>
+
+    <ul class="bullet-list">
+      <li>30-minute focused sessions</li>
+      <li>Confidential and judgment-free</li>
+      <li>Bring an agenda or come open</li>
+    </ul>
+
+    <form class="form-box" id="member-form" action="https://formspree.io/f/xvzyrokr" method="POST">
+      <input type="hidden" name="form_type" value="Member Booking" />
+      <div class="slots-label">Pick a slot from my availability</div>
+      <div class="slots-grid">
+        <button class="slot" onclick="selectSlot(this)">Mon · 6:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 6:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 7:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 7:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 8:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Mon · 8:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 7:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 7:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 8:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Wed · 8:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 6:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 6:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 7:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 7:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 8:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Fri · 8:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 11:00 AM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 11:30 AM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 12:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 12:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 1:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 1:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 2:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 2:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 3:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 3:30 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 4:00 PM</button>
+        <button class="slot" onclick="selectSlot(this)">Sat · 4:30 PM</button>
+      </div>
+      <input type="hidden" name="selected_slot" id="member-slot-value" />
+      <div class="form-group">
+        <label for="member-name">Name</label>
+        <input type="text" id="member-name" name="name" placeholder="Your full name" required />
+      </div>
+      <div class="form-group">
+        <label for="member-email">Email</label>
+        <input type="email" id="member-email" name="email" placeholder="your@email.com" required />
+      </div>
+      <div class="form-group">
+        <label for="member-notes">Anything you'd like to cover? (optional)</label>
+        <textarea id="member-notes" name="notes" placeholder="e.g. interview prep for a PMO role"></textarea>
+      </div>
+      <div id="member-success" style="display:none; color:#e8692a; font-size:0.9rem; margin-bottom:0.75rem; font-weight:500;">
+        Booked! I'll confirm your slot by email within 24 hours.
+      </div>
+      <button type="submit" class="btn-submit-dark">Request meeting</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo-row">
+      <div class="footer-logo-box">
+        <span>PM</span>
+        <em>Hub</em>
+      </div>
+    </div>
+    <p>© 2026 The PM Hub: Project Management Community</p>
+    <p>Built with care for aspiring PMs.</p>
+  </footer>
+
+  <script>
+    const STORAGE_KEY = 'pmhub_booked_slots';
+
+    function getBookedSlots() {
+      try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; }
+      catch { return []; }
+    }
+
+    function saveBookedSlot(label) {
+      const booked = getBookedSlots();
+      if (!booked.includes(label)) booked.push(label);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(booked));
+    }
+
+    // Remove a slot button from every grid on the page
+    function removeSlotEverywhere(label) {
+      document.querySelectorAll('.slot').forEach(btn => {
+        if (btn.textContent.trim() === label) btn.remove();
+      });
+    }
+
+    // On page load, remove any already-booked slots from all grids
+    function applyBookedSlots() {
+      getBookedSlots().forEach(label => removeSlotEverywhere(label));
+    }
+
+    function selectSlot(el) {
+      const grid = el.closest('.slots-grid');
+      grid.querySelectorAll('.slot').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+    }
+
+    function handleSubmit(btn) {
+      const formBox = btn.closest('.form-box');
+      const activeSlot = formBox.querySelector('.slot.active');
+
+      if (!activeSlot) {
+        showToast('Please pick a time slot first.', 'warn');
+        return;
+      }
+
+      const label = activeSlot.textContent.trim();
+
+      // Save and remove from all grids
+      saveBookedSlot(label);
+      removeSlotEverywhere(label);
+
+      // Reset the form fields in this box
+      formBox.querySelectorAll('input, textarea').forEach(el => el.value = '');
+
+      showToast(`Booked! ${label} has been removed from availability.`, 'success');
+    }
+
+    function showToast(msg, type) {
+      const existing = document.getElementById('pmhub-toast');
+      if (existing) existing.remove();
+
+      const toast = document.createElement('div');
+      toast.id = 'pmhub-toast';
+      toast.textContent = msg;
+      toast.style.cssText = `
+        position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+        background: ${type === 'success' ? '#e8692a' : '#555'};
+        color: #fff; padding: 0.75rem 1.5rem; border-radius: 100px;
+        font-family: Inter, sans-serif; font-size: 0.875rem; font-weight: 500;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 9999;
+        white-space: nowrap; max-width: 90vw; text-align: center;
+        animation: slideUp 0.3s ease;
+      `;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+
+    // Add a style for the toast animation
+    const style = document.createElement('style');
+    style.textContent = `@keyframes slideUp { from { opacity:0; transform: translateX(-50%) translateY(12px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }`;
+    document.head.appendChild(style);
+
+    // Run on load
+    applyBookedSlots();
+
+    // Generic AJAX form handler for Formspree
+    async function submitToFormspree(form, successId, slotHiddenId) {
+      const btn = form.querySelector('button[type="submit"]');
+      const successMsg = document.getElementById(successId);
+
+      // If form has a slot grid, make sure one is selected
+      const grid = form.querySelector('.slots-grid');
+      if (grid) {
+        const activeSlot = grid.querySelector('.slot.active');
+        if (!activeSlot) {
+          showToast('Please pick a time slot first.', 'warn');
+          return;
+        }
+        // Write slot label into hidden field
+        document.getElementById(slotHiddenId).value = activeSlot.textContent.trim();
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Sending...';
+
+      try {
+        const response = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { 'Accept': 'application/json' }
+        });
+
+        if (response.ok) {
+          // If there was a slot, remove it from all grids and save to storage
+          if (grid) {
+            const slotLabel = document.getElementById(slotHiddenId).value;
+            saveBookedSlot(slotLabel);
+            removeSlotEverywhere(slotLabel);
+          }
+          form.reset();
+          successMsg.style.display = 'block';
+          btn.textContent = 'Sent!';
+          btn.style.background = '#b84f1a';
+        } else {
+          btn.textContent = 'Something went wrong. Try again.';
+          btn.disabled = false;
+        }
+      } catch {
+        btn.textContent = 'Something went wrong. Try again.';
+        btn.disabled = false;
+      }
+    }
+
+    // Wire up all three forms
+    document.getElementById('join-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitToFormspree(this, 'join-success', null);
+    });
+
+    document.getElementById('chat-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitToFormspree(this, 'chat-success', 'chat-slot-value');
+    });
+
+    document.getElementById('member-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      submitToFormspree(this, 'member-success', 'member-slot-value');
+    });
+  </script>
+</body>
+</html>
